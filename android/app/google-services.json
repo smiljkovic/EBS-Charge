@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "152076669434",
+    "firebase_url": "https://adminportal-5e11e-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "adminportal-5e11e",
+    "storage_bucket": "adminportal-5e11e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152076669434:android:a371d9868962ba4e4e9443",
+        "android_client_info": {
+          "package_name": "com.smiljkovic.ebscharge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152076669434-1bt9fre94u828f1ninpr2t0b4888b2r1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smiljkovic.ebscharge",
+            "certificate_hash": "c040f44bebc70b7246c01b9ddf66e1e19da57829"
+          }
+        },
+        {
+          "client_id": "152076669434-sqh19to975nhpvh8qin7c92lp4dldufa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-gJOVzWLSoxSR4P0pqzhiCvpFSBXclEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152076669434-sqh19to975nhpvh8qin7c92lp4dldufa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
