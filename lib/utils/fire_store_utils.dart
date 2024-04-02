@@ -8,6 +8,7 @@ import 'package:smiljkovic/constant/collection_name.dart';
 import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/model/admin_commission.dart';
 import 'package:smiljkovic/model/bank_details_model.dart';
+import 'package:smiljkovic/model/charger_model.dart';
 import 'package:smiljkovic/model/coupon_model.dart';
 import 'package:smiljkovic/model/faq_model.dart';
 import 'package:smiljkovic/model/language_model.dart';
@@ -292,6 +293,16 @@ class FireStoreUtils {
     return null;
   }
 
+  static Future<String?> saveChargerDetails(ChargerModel createSlotModel) async {
+    try {
+      await fireStore.collection(CollectionName.chargers).doc(createSlotModel.id).set(createSlotModel.toJson());
+    } catch (e, s) {
+      log('saveChargerDetails FAILED: $e $s');
+      return null;
+    }
+    return null;
+  }
+
   // static Future<String?> deleteParking(ParkingModel parkingModel) async {
   //   try {
   //     await fireStore
@@ -329,22 +340,75 @@ class FireStoreUtils {
   //   return facilitiesModelList;
   // }
 
-  StreamController<List<ParkingModel>>? getNearestOrderRequestController;
+  // StreamController<List<ParkingModel>>? getNearestOrderRequestController;
+  //
+  // Stream<List<ParkingModel>> getParkingNearest({double? latitude, double? longLatitude}) async* {
+  //   getNearestOrderRequestController = StreamController<List<ParkingModel>>.broadcast();
+  //   List<ParkingModel> ordersList = [];
+  //   Query query = fireStore.collection(CollectionName.parking).where("isEnable", isEqualTo: true);
+  //
+  //   GeoFirePoint center = GeoFlutterFire().point(latitude: latitude ?? 0.0, longitude: longLatitude ?? 0.0);
+  //   Stream<List<DocumentSnapshot>> stream =
+  //       GeoFlutterFire().collection(collectionRef: query).within(center: center, radius: double.parse(Constant.radius), field: 'position', strictMode: true);
+  //
+  //   stream.listen((List<DocumentSnapshot> documentList) {
+  //     ordersList.clear();
+  //     for (var document in documentList) {
+  //       final data = document.data() as Map<String, dynamic>;
+  //       ParkingModel orderModel = ParkingModel.fromJson(data);
+  //
+  //       ordersList.add(orderModel);
+  //     }
+  //     getNearestOrderRequestController!.sink.add(ordersList);
+  //   });
+  //
+  //   yield* getNearestOrderRequestController!.stream;
+  // }
+  //
+  // StreamController<List<ParkingModel>>? getNearestFilterParking;
+  //
+  // Stream<List<ParkingModel>> getFilterParking({double? latitude, double? longLatitude, String? parkingType, String? distance}) async* {
+  //   getNearestFilterParking = StreamController<List<ParkingModel>>.broadcast();
+  //   List<ParkingModel> ordersList = [];
+  //
+  //   Query query = fireStore.collection(CollectionName.parking).where("parkingType", isEqualTo: parkingType).where("isEnable", isEqualTo: true);
+  //
+  //   GeoFirePoint center = GeoFlutterFire().point(latitude: latitude ?? 0.0, longitude: longLatitude ?? 0.0);
+  //   Stream<List<DocumentSnapshot>> stream =
+  //       GeoFlutterFire().collection(collectionRef: query).within(center: center, radius: double.parse(distance.toString()), field: 'position', strictMode: true);
+  //
+  //   stream.listen((List<DocumentSnapshot> documentList) {
+  //     ordersList.clear();
+  //     for (var document in documentList) {
+  //       final data = document.data() as Map<String, dynamic>;
+  //       ParkingModel orderModel = ParkingModel.fromJson(data);
+  //
+  //       ordersList.add(orderModel);
+  //     }
+  //     getNearestFilterParking!.sink.add(ordersList);
+  //   });
+  //
+  //   yield* getNearestFilterParking!.stream;
+  // }
 
-  Stream<List<ParkingModel>> getParkingNearest({double? latitude, double? longLatitude}) async* {
-    getNearestOrderRequestController = StreamController<List<ParkingModel>>.broadcast();
-    List<ParkingModel> ordersList = [];
-    Query query = fireStore.collection(CollectionName.parking).where("isEnable", isEqualTo: true);
+
+  // Nikola - start
+  StreamController<List<ChargerModel>>? getNearestOrderRequestController;
+
+  Stream<List<ChargerModel>> getChargerNearest({double? latitude, double? longLatitude}) async* {
+    getNearestOrderRequestController = StreamController<List<ChargerModel>>.broadcast();
+    List<ChargerModel> ordersList = [];
+    Query query = fireStore.collection(CollectionName.chargers).where("isEnable", isEqualTo: true);
 
     GeoFirePoint center = GeoFlutterFire().point(latitude: latitude ?? 0.0, longitude: longLatitude ?? 0.0);
     Stream<List<DocumentSnapshot>> stream =
-        GeoFlutterFire().collection(collectionRef: query).within(center: center, radius: double.parse(Constant.radius), field: 'position', strictMode: true);
+    GeoFlutterFire().collection(collectionRef: query).within(center: center, radius: double.parse(Constant.radius), field: 'position', strictMode: true);
 
     stream.listen((List<DocumentSnapshot> documentList) {
       ordersList.clear();
       for (var document in documentList) {
         final data = document.data() as Map<String, dynamic>;
-        ParkingModel orderModel = ParkingModel.fromJson(data);
+        ChargerModel orderModel = ChargerModel.fromJson(data);
 
         ordersList.add(orderModel);
       }
@@ -354,40 +418,42 @@ class FireStoreUtils {
     yield* getNearestOrderRequestController!.stream;
   }
 
-  StreamController<List<ParkingModel>>? getNearestFilterParking;
+  StreamController<List<ChargerModel>>? getNearestFilterCharger;
 
-  Stream<List<ParkingModel>> getFilterParking({double? latitude, double? longLatitude, String? parkingType, String? distance}) async* {
-    getNearestFilterParking = StreamController<List<ParkingModel>>.broadcast();
-    List<ParkingModel> ordersList = [];
+  Stream<List<ChargerModel>> getFilterCharger({double? latitude, double? longLatitude, String? chargerType, String? distance}) async* {
+    getNearestFilterCharger = StreamController<List<ChargerModel>>.broadcast();
+    List<ChargerModel> ordersList = [];
 
-    Query query = fireStore.collection(CollectionName.parking).where("parkingType", isEqualTo: parkingType).where("isEnable", isEqualTo: true);
+    Query query = fireStore.collection(CollectionName.chargers).where("chargerType", isEqualTo: chargerType).where("isEnable", isEqualTo: true);
 
     GeoFirePoint center = GeoFlutterFire().point(latitude: latitude ?? 0.0, longitude: longLatitude ?? 0.0);
     Stream<List<DocumentSnapshot>> stream =
-        GeoFlutterFire().collection(collectionRef: query).within(center: center, radius: double.parse(distance.toString()), field: 'position', strictMode: true);
+    GeoFlutterFire().collection(collectionRef: query).within(center: center, radius: double.parse(distance.toString()), field: 'position', strictMode: true);
 
     stream.listen((List<DocumentSnapshot> documentList) {
       ordersList.clear();
       for (var document in documentList) {
         final data = document.data() as Map<String, dynamic>;
-        ParkingModel orderModel = ParkingModel.fromJson(data);
+        ChargerModel orderModel = ChargerModel.fromJson(data);
 
         ordersList.add(orderModel);
       }
-      getNearestFilterParking!.sink.add(ordersList);
+      getNearestFilterCharger!.sink.add(ordersList);
     });
 
-    yield* getNearestFilterParking!.stream;
+    yield* getNearestFilterCharger!.stream;
   }
 
-  static Future<ParkingModel?> getParkingDetails(String uuid) async {
-    ParkingModel? slotModel;
-    await fireStore.collection(CollectionName.parking).doc(uuid).get().then((value) {
+
+
+  static Future<ChargerModel?> getChargerDetails(String uuid) async {
+    ChargerModel? slotModel;
+    await fireStore.collection(CollectionName.chargers).doc(uuid).get().then((value) {
       if (value.exists) {
-        slotModel = ParkingModel.fromJson(value.data()!);
+        slotModel = ChargerModel.fromJson(value.data()!);
       }
     }).catchError((error) {
-      log("Failed to update user: $error");
+      log("getChargerDetails FAILED: $error");
       slotModel = null;
     });
     return slotModel;
@@ -421,43 +487,44 @@ class FireStoreUtils {
   //   return parkingList;
   // }
 
-  static Future<bool?> bookMarked(ParkingModel parkingModel) async {
+  //TODO Nikola - this is commented/replaced for charger
+  static Future<bool?> bookMarked(ChargerModel chargerModel) async {
     try {
-      if (parkingModel.bookmarkedUser == null) {
-        parkingModel.bookmarkedUser = [];
-        parkingModel.bookmarkedUser!.add(getCurrentUid());
+      if (chargerModel.bookmarkedUser == null) {
+        chargerModel.bookmarkedUser = [];
+        chargerModel.bookmarkedUser!.add(getCurrentUid());
       } else {
-        parkingModel.bookmarkedUser!.add(getCurrentUid());
+        chargerModel.bookmarkedUser!.add(getCurrentUid());
       }
-      await fireStore.collection(CollectionName.parking).doc(parkingModel.id).set(parkingModel.toJson());
+      await fireStore.collection(CollectionName.chargers).doc(chargerModel.id).set(chargerModel.toJson());
     } catch (e, s) {
-      log('FireStoreUtils.firebaseCreateNewUser $e $s');
+      log('bookMarked FAILED: $e $s');
       return null;
     }
     return null;
   }
 
-  static Future<bool?> removeBookMarked(ParkingModel parkingModel) async {
+  static Future<bool?> removeBookMarked(ChargerModel chargerModel) async {
     try {
-      parkingModel.bookmarkedUser!.remove(getCurrentUid());
+      chargerModel.bookmarkedUser!.remove(getCurrentUid());
 
-      await fireStore.collection(CollectionName.parking).doc(parkingModel.id).set(parkingModel.toJson());
+      await fireStore.collection(CollectionName.chargers).doc(chargerModel.id).set(chargerModel.toJson());
     } catch (e, s) {
-      log('FireStoreUtils.firebaseCreateNewUser $e $s');
+      log('removeBookMarked FAILED: $e $s');
       return null;
     }
     return null;
   }
 
-  static Future<List<ParkingModel>?> getBookMarkedList() async {
-    List<ParkingModel> parkingList = [];
-    await fireStore.collection(CollectionName.parking).where("bookmarkedUser", arrayContains: getCurrentUid()).get().then((value) async {
+  static Future<List<ChargerModel>?> getBookMarkedList() async {
+    List<ChargerModel> chargersList = [];
+    await fireStore.collection(CollectionName.chargers).where("bookmarkedUser", arrayContains: getCurrentUid()).get().then((value) async {
       for (var element in value.docs) {
-        ParkingModel facilitiesModel = ParkingModel.fromJson(element.data());
-        parkingList.add(facilitiesModel);
+        ChargerModel facilitiesModel = ChargerModel.fromJson(element.data());
+        chargersList.add(facilitiesModel);
       }
     });
-    return parkingList;
+    return chargersList;
   }
 
   static Future<bool> updateUserVehicle(UserVehicleModel userVehicleModel) async {

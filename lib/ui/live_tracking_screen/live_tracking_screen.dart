@@ -67,7 +67,7 @@ class LiveTrackingScreen extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        controller.orderModel.value.parkingDetails!.address.toString(),
+                                        controller.orderModel.value.chargerDetails!.address.toString(),
                                         maxLines: 1,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -116,7 +116,7 @@ class LiveTrackingScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            controller.orderModel.value.parkingDetails!.name.toString(),
+                            controller.orderModel.value.chargerDetails!.name.toString(),
                             maxLines: 1,
                             style: TextStyle(
                               fontSize: 16,
@@ -128,7 +128,7 @@ class LiveTrackingScreen extends StatelessWidget {
                             height: 2,
                           ),
                           Text(
-                            controller.orderModel.value.parkingDetails!.address.toString(),
+                            controller.orderModel.value.chargerDetails!.address.toString(),
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: AppThemData.regular,

@@ -5,7 +5,7 @@ import 'package:smiljkovic/model/order_model.dart';
 import 'package:smiljkovic/model/wallet_transaction_model.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 
-class ParkingTicketController extends GetxController {
+class ChargerTicketController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
@@ -65,19 +65,19 @@ class ParkingTicketController extends GetxController {
       }
     });
 
-    WalletTransactionModel transactionParkingModel = WalletTransactionModel(
+    WalletTransactionModel transactionChargerModel = WalletTransactionModel(
         id: Constant.getUuid(),
         amount: "-${calculateAmount().toString()}",
         createdDate: Timestamp.now(),
         paymentType: "Wallet",
         transactionId: orderModel.value.id,
         isCredit: false,
-        userId: orderModel.value.parkingDetails!.userId.toString(),
-        note: "Parking amount revers");
+        userId: orderModel.value.chargerDetails!.userId.toString(),
+        note: "Charger amount revers");
 
-    await FireStoreUtils.setWalletTransaction(transactionParkingModel).then((value) async {
+    await FireStoreUtils.setWalletTransaction(transactionChargerModel).then((value) async {
       if (value == true) {
-        await FireStoreUtils.updateOtherUserWallet(amount: "-${calculateAmount().toString()}", id: orderModel.value.parkingDetails!.userId.toString());
+        await FireStoreUtils.updateOtherUserWallet(amount: "-${calculateAmount().toString()}", id: orderModel.value.chargerDetails!.userId.toString());
       }
     });
 
@@ -89,7 +89,7 @@ class ParkingTicketController extends GetxController {
         paymentType: "Wallet",
         transactionId: orderModel.value.id,
         isCredit: true,
-        userId: orderModel.value.parkingDetails!.userId.toString(),
+        userId: orderModel.value.chargerDetails!.userId.toString(),
         note: "Admin commission revers");
 
     await FireStoreUtils.setWalletTransaction(adminCommissionWallet).then((value) async {
@@ -97,7 +97,7 @@ class ParkingTicketController extends GetxController {
         await FireStoreUtils.updateOtherUserWallet(
             amount:
                 "${Constant.calculateAdminCommission(amount: (double.parse(orderModel.value.subTotal.toString()) - double.parse(couponAmount.toString())).toString(), adminCommission: orderModel.value.adminCommission)}",
-            id: orderModel.value.parkingDetails!.userId.toString());
+            id: orderModel.value.chargerDetails!.userId.toString());
       }
     });
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smiljkovic/model/order_model.dart';
-import 'package:smiljkovic/model/parking_model.dart';
+import 'package:smiljkovic/model/charger_model.dart';
 import 'package:smiljkovic/model/user_model.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 
@@ -13,7 +13,7 @@ class RatingController extends GetxController {
   Rx<TextEditingController> commentController = TextEditingController().obs;
 
   Rx<ReviewModel> reviewModel = ReviewModel().obs;
-  Rx<ParkingModel> parkingModel = ParkingModel().obs;
+  Rx<ChargerModel> chargerModel = ChargerModel().obs;
   Rx<UserModel> userModel = UserModel().obs;
 
   @override
@@ -30,9 +30,9 @@ class RatingController extends GetxController {
     if (argumentData != null) {
       orderModel.value = argumentData['orderModel'];
     }
-    await FireStoreUtils.getParkingDetails(orderModel.value.parkingId.toString()).then((value) {
+    await FireStoreUtils.getChargerDetails(orderModel.value.chargerId.toString()).then((value) {
       if (value != null) {
-        parkingModel.value = value;
+        chargerModel.value = value;
       }
     });
     await FireStoreUtils.getUserProfile(FireStoreUtils.getCurrentUid()).then((value) {

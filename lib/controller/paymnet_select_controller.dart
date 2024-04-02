@@ -34,7 +34,7 @@ import 'package:smiljkovic/payment/paystack/pay_stack_url_model.dart';
 import 'package:smiljkovic/payment/paystack/paystack_url_genrater.dart';
 import 'package:smiljkovic/payment/stripe_failed_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
-import 'package:smiljkovic/ui/my_booking/parking_ticket_screen.dart';
+import 'package:smiljkovic/ui/my_booking/charger_ticket_screen.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -208,12 +208,12 @@ class PaymentSelectController extends GetxController {
         paymentType: selectedPaymentMethod.value,
         transactionId: orderModel.value.id,
         isCredit: true,
-        userId: orderModel.value.parkingDetails!.userId.toString(),
-        note: "Parking amount credited");
+        userId: orderModel.value.chargerDetails!.userId.toString(),
+        note: "Charger amount credited");
 
     await FireStoreUtils.setWalletTransaction(transactionModel).then((value) async {
       if (value == true) {
-        await FireStoreUtils.updateOtherUserWallet(amount: calculateAmount().toString(), id: orderModel.value.parkingDetails!.userId.toString());
+        await FireStoreUtils.updateOtherUserWallet(amount: calculateAmount().toString(), id: orderModel.value.chargerDetails!.userId.toString());
       }
     });
 
@@ -225,7 +225,7 @@ class PaymentSelectController extends GetxController {
         paymentType: selectedPaymentMethod.value,
         transactionId: orderModel.value.id,
         isCredit: false,
-        userId: orderModel.value.parkingDetails!.userId.toString(),
+        userId: orderModel.value.chargerDetails!.userId.toString(),
         note: "Admin commission debited");
 
     await FireStoreUtils.setWalletTransaction(adminCommissionWallet).then((value) async {
@@ -233,7 +233,7 @@ class PaymentSelectController extends GetxController {
         await FireStoreUtils.updateOtherUserWallet(
             amount:
                 "-${Constant.calculateAdminCommission(amount: (double.parse(orderModel.value.subTotal.toString()) - double.parse(couponAmount.toString())).toString(), adminCommission: orderModel.value.adminCommission)}",
-            id: orderModel.value.parkingDetails!.userId.toString());
+            id: orderModel.value.chargerDetails!.userId.toString());
       }
     });
 
@@ -243,22 +243,22 @@ class PaymentSelectController extends GetxController {
       }
     });
 
-    UserModel? receiverUserModel = await FireStoreUtils.getUserProfile(orderModel.value.parkingDetails!.userId.toString());
+    UserModel? receiverUserModel = await FireStoreUtils.getUserProfile(orderModel.value.chargerDetails!.userId.toString());
 
     Map<String, dynamic> playLoad = <String, dynamic>{"type": "order", "orderId": orderModel.value.id};
 
     await SendNotification.sendOneNotification(
         token: receiverUserModel!.fcmToken.toString(),
         title: 'Booking Placed',
-        body: '${orderModel.value.parkingDetails!.name.toString()} Booking placed on ${Constant.timestampToDate(orderModel.value.bookingDate!)}.',
+        body: '${orderModel.value.chargerDetails!.name.toString()} Booking placed on ${Constant.timestampToDate(orderModel.value.bookingDate!)}.',
         payload: playLoad);
 
-    await FireStoreUtils.getWatchman(orderModel.value.parkingDetails!.id.toString(), orderModel.value.parkingDetails!.userId.toString()).then((value) async {
+    await FireStoreUtils.getWatchman(orderModel.value.chargerDetails!.id.toString(), orderModel.value.chargerDetails!.userId.toString()).then((value) async {
       if (value != null) {
         await SendNotification.sendOneNotification(
             token: value.fcmToken.toString(),
             title: 'Booking Placed',
-            body: '${orderModel.value.parkingDetails!.name.toString()} Booking placed on ${Constant.timestampToDate(orderModel.value.bookingDate!)}.',
+            body: '${orderModel.value.chargerDetails!.name.toString()} Booking placed on ${Constant.timestampToDate(orderModel.value.bookingDate!)}.',
             payload: playLoad);
       }
     });
@@ -266,7 +266,7 @@ class PaymentSelectController extends GetxController {
     await FireStoreUtils.setOrder(orderModel.value).then((value) {
       if (value == true) {
         ShowToastDialog.closeLoader();
-        Get.to(() => const ParkingTicketScreen(), arguments: {"orderModel": orderModel.value});
+        Get.to(() => const ChargerTicketScreen(), arguments: {"orderModel": orderModel.value});
       }
     });
   }

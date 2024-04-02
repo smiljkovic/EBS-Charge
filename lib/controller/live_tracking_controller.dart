@@ -40,13 +40,13 @@ class LiveTrackingController extends GetxController {
       if (position != null) {
         print("-->${position.latitude}");
         getPolyline(
-            sourceLatitude: orderModel.value.parkingDetails!.location!.latitude,
-            sourceLongitude: orderModel.value.parkingDetails!.location!.longitude,
+            sourceLatitude: orderModel.value.chargerDetails!.location!.latitude,
+            sourceLongitude: orderModel.value.chargerDetails!.location!.longitude,
             destinationLatitude: position.latitude,
             destinationLongitude: position.longitude,
             heading: position.heading);
         distance.value =
-            calculateDistance(orderModel.value.parkingDetails!.location!.latitude, orderModel.value.parkingDetails!.location!.longitude, position.latitude, position.longitude)
+            calculateDistance(orderModel.value.chargerDetails!.location!.latitude, orderModel.value.chargerDetails!.location!.longitude, position.latitude, position.longitude)
                 .toString();
       }
     });

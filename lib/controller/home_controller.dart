@@ -6,9 +6,12 @@ import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/constant/show_toast_dialog.dart';
 import 'package:smiljkovic/model/location_lat_lng.dart';
 import 'package:smiljkovic/model/parking_model.dart';
-import 'package:smiljkovic/ui/parking_details_screen/parking_details_screen.dart';
+
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/utils.dart';
+
+import '../model/charger_model.dart';
+import '../ui/charger_details_screen/charger_details_screen.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = true.obs;
@@ -39,7 +42,7 @@ class HomeController extends GetxController {
     List<Placemark> placeMarks = await placemarkFromCoordinates(Constant.currentLocation!.latitude!, Constant.currentLocation!.longitude!);
     Constant.country = placeMarks.first.country;
     getTax();
-    getParking();
+    getCharger();
     isLoading.value = false;
   }
 
@@ -53,12 +56,12 @@ class HomeController extends GetxController {
     });
   }
 
-  RxList<ParkingModel> parkingList = <ParkingModel>[].obs;
+  RxList<ChargerModel> chargersList = <ChargerModel>[].obs;
 
-  getParking() {
-    FireStoreUtils().getParkingNearest(latitude: Constant.currentLocation!.latitude, longLatitude: Constant.currentLocation!.longitude).listen((event) {
-      parkingList.value = event;
-      for (var element in parkingList) {
+  getCharger() {
+    FireStoreUtils().getChargerNearest(latitude: Constant.currentLocation!.latitude, longLatitude: Constant.currentLocation!.longitude).listen((event) {
+      chargersList.value = event;
+      for (var element in chargersList) {
         addMarker(latitude: element.location!.latitude, longitude: element.location!.longitude, id: element.id.toString(), rotation: 0, descriptor: parkingMarker!);
       }
     });
@@ -90,9 +93,9 @@ class HomeController extends GetxController {
 
   redirect(String id) async {
     ShowToastDialog.showLoader("Please wait..");
-    await FireStoreUtils.getParkingDetails(id).then((value) {
+    await FireStoreUtils.getChargerDetails(id).then((value) {
       ShowToastDialog.closeLoader();
-      Get.to(() => const ParkingDetailsScreen(), arguments: {"parkingModel": value!});
+      Get.to(() => const ChargerDetailsScreen(), arguments: {"chargerModel": value!});
     });
   }
 

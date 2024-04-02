@@ -11,7 +11,7 @@ import 'package:smiljkovic/themes/common_ui.dart';
 import 'package:smiljkovic/themes/responsive.dart';
 import 'package:smiljkovic/themes/round_button_fill.dart';
 import 'package:smiljkovic/ui/booking_process/review_summery_screen.dart';
-import 'package:smiljkovic/ui/my_booking/parking_ticket_screen.dart';
+import 'package:smiljkovic/ui/my_booking/charger_ticket_screen.dart';
 import 'package:smiljkovic/utils/dark_theme_provider.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
@@ -81,7 +81,7 @@ class MyBookingScreen extends StatelessWidget {
   Widget onGoingView(themeChange) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection(CollectionName.bookedParkingOrder)
+          .collection(CollectionName.bookedChargerOrder)
           .where("userId", isEqualTo: FireStoreUtils.getCurrentUid())
           .where('status', whereIn: [Constant.placed, Constant.onGoing])
           .orderBy("createdAt", descending: true)
@@ -94,7 +94,7 @@ class MyBookingScreen extends StatelessWidget {
           return Constant.loader();
         }
         return snapshot.data!.docs.isEmpty
-            ? Constant.showEmptyView(message: "No Book Parking Found".tr)
+            ? Constant.showEmptyView(message: "No Book Charger Found".tr)
             : ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 scrollDirection: Axis.vertical,
@@ -119,7 +119,7 @@ class MyBookingScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                                     child: NetworkImageWidget(
-                                      imageUrl: orderModel.parkingDetails!.image.toString(),
+                                      imageUrl: orderModel.chargerDetails!.image.toString(),
                                       height: Responsive.height(9, context),
                                       width: Responsive.height(9, context),
                                       fit: BoxFit.cover,
@@ -134,7 +134,7 @@ class MyBookingScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          orderModel.parkingDetails!.name.toString(),
+                                          orderModel.chargerDetails!.name.toString(),
                                           style: TextStyle(
                                             color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10,
                                             fontSize: 14,
@@ -145,7 +145,7 @@ class MyBookingScreen extends StatelessWidget {
                                           height: 5,
                                         ),
                                         Text(
-                                          orderModel.parkingDetails!.address.toString(),
+                                          orderModel.chargerDetails!.address.toString(),
                                           maxLines: 2,
                                           style: const TextStyle(color: AppThemData.grey07, fontSize: 12, fontFamily: AppThemData.regular, overflow: TextOverflow.ellipsis),
                                         ),
@@ -161,7 +161,7 @@ class MyBookingScreen extends StatelessWidget {
                                               height: 18,
                                             ),
                                             Text(
-                                              "Parking Slot : ${orderModel.parkingSlotId.toString()}".tr,
+                                              "Charger Slot : ${orderModel.chargerSlotId.toString()}".tr,
                                               maxLines: 2,
                                               style: const TextStyle(color: AppThemData.blueLight07, fontSize: 12, fontFamily: AppThemData.medium, overflow: TextOverflow.ellipsis),
                                             ),
@@ -198,7 +198,7 @@ class MyBookingScreen extends StatelessWidget {
                                     textColor: themeChange.getThem() ? AppThemData.grey03 : AppThemData.grey09,
                                     height: 5,
                                     onPress: () {
-                                      Get.to(() => const ParkingTicketScreen(), arguments: {"orderModel": orderModel});
+                                      Get.to(() => const ChargerTicketScreen(), arguments: {"orderModel": orderModel});
                                     },
                                   ),
                                 ),
@@ -220,7 +220,7 @@ class MyBookingScreen extends StatelessWidget {
   Widget completedView(themeChange) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection(CollectionName.bookedParkingOrder)
+          .collection(CollectionName.bookedChargerOrder)
           .where("userId", isEqualTo: FireStoreUtils.getCurrentUid())
           .where('status', whereIn: [Constant.completed])
           .orderBy("createdAt", descending: true)
@@ -258,7 +258,7 @@ class MyBookingScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                                     child: NetworkImageWidget(
-                                      imageUrl: orderModel.parkingDetails!.image.toString(),
+                                      imageUrl: orderModel.chargerDetails!.image.toString(),
                                       height: Responsive.height(9, context),
                                       width: Responsive.height(9, context),
                                       fit: BoxFit.cover,
@@ -273,7 +273,7 @@ class MyBookingScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          orderModel.parkingDetails!.name.toString(),
+                                          orderModel.chargerDetails!.name.toString(),
                                           style: TextStyle(
                                             color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10,
                                             fontSize: 14,
@@ -284,7 +284,7 @@ class MyBookingScreen extends StatelessWidget {
                                           height: 5,
                                         ),
                                         Text(
-                                          orderModel.parkingDetails!.address.toString(),
+                                          orderModel.chargerDetails!.address.toString(),
                                           maxLines: 2,
                                           style: const TextStyle(color: AppThemData.grey07, fontSize: 12, fontFamily: AppThemData.regular, overflow: TextOverflow.ellipsis),
                                         ),
@@ -327,7 +327,7 @@ class MyBookingScreen extends StatelessWidget {
   Widget canceledView(themeChange) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection(CollectionName.bookedParkingOrder)
+          .collection(CollectionName.bookedChargerOrder)
           .where("userId", isEqualTo: FireStoreUtils.getCurrentUid())
           .where('status', whereIn: [Constant.canceled])
           .orderBy("createdAt", descending: true)
@@ -365,7 +365,7 @@ class MyBookingScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                                     child: NetworkImageWidget(
-                                      imageUrl: orderModel.parkingDetails!.image.toString(),
+                                      imageUrl: orderModel.chargerDetails!.image.toString(),
                                       height: Responsive.height(9, context),
                                       width: Responsive.height(9, context),
                                       fit: BoxFit.cover,
@@ -380,7 +380,7 @@ class MyBookingScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          orderModel.parkingDetails!.name.toString(),
+                                          orderModel.chargerDetails!.name.toString(),
                                           style: TextStyle(
                                             color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10,
                                             fontSize: 14,
@@ -391,7 +391,7 @@ class MyBookingScreen extends StatelessWidget {
                                           height: 5,
                                         ),
                                         Text(
-                                          orderModel.parkingDetails!.address.toString(),
+                                          orderModel.chargerDetails!.address.toString(),
                                           maxLines: 2,
                                           style: const TextStyle(color: AppThemData.grey07, fontSize: 12, fontFamily: AppThemData.regular, overflow: TextOverflow.ellipsis),
                                         ),

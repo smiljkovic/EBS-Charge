@@ -5,13 +5,15 @@ import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/model/user_vehicle_model.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 
-class BookingParkingDetailsController extends GetxController {
+import '../model/charger_model.dart';
+
+class BookingChargerDetailsController extends GetxController {
   RxBool isLoading = false.obs;
   RxString currentMonth = DateFormat.yMMMM().format(DateTime.now()).obs;
   Rx<DateTime> selectedDateTime = DateTime.now().obs;
   RxDouble selectedDuration = 2.0.obs;
 
-  Rx<ParkingModel> parkingModel = ParkingModel().obs;
+  Rx<ChargerModel> chargerModel = ChargerModel().obs;
   Rx<UserVehicleModel> vehicle = UserVehicleModel().obs;
 
   Rx<DateTime> startTime = DateTime.now().obs;
@@ -31,8 +33,8 @@ class BookingParkingDetailsController extends GetxController {
   getArgument() async {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
-      parkingModel.value = argumentData['parkingModel'];
-      getParkingDetails();
+      chargerModel.value = argumentData['chargerModel'];
+      getChargerDetails();
     }
 
     startTimeController.value.text = DateFormat('HH:mm').format(startTime.value);
@@ -45,16 +47,16 @@ class BookingParkingDetailsController extends GetxController {
     update();
   }
 
-  getParkingDetails() async {
-    await FireStoreUtils.getParkingDetails(parkingModel.value.id.toString()).then((value) {
+  getChargerDetails() async {
+    await FireStoreUtils.getChargerDetails(chargerModel.value.id.toString()).then((value) {
       if (value != null) {
-        parkingModel.value = value;
+        chargerModel.value = value;
       }
     });
   }
 
-  calculateParkingAmount() {
-    return double.parse(parkingModel.value.perHrPrice.toString()) * selectedDuration.value;
+  calculateChargerAmount() {
+    return double.parse(chargerModel.value.perHrPrice.toString()) * selectedDuration.value;
   }
 
   String calculateDuration(String? startTime, String? endTime) {

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/constant/show_toast_dialog.dart';
-import 'package:smiljkovic/controller/booking_parking_details_controller.dart';
+import 'package:smiljkovic/controller/booking_charger_details_controller.dart';
 import 'package:smiljkovic/controller/vehicle_list_controller.dart';
 import 'package:smiljkovic/model/order_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
@@ -16,21 +16,22 @@ import 'package:smiljkovic/themes/responsive.dart';
 import 'package:smiljkovic/themes/round_button_fill.dart';
 import 'package:smiljkovic/themes/text_field_widget.dart';
 import 'package:smiljkovic/ui/add_select_vehicle/select_vehicle_screen.dart';
-import 'package:smiljkovic/ui/booking_process/parking_view_screen.dart';
 import 'package:smiljkovic/utils/dark_theme_provider.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class BookingParkingDetailsScreen extends StatelessWidget {
-  const BookingParkingDetailsScreen({super.key});
+import 'charger_view_screen.dart';
+
+class BookingChargerDetailsScreen extends StatelessWidget {
+  const BookingChargerDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return GetX(
-        init: BookingParkingDetailsController(),
+        init: BookingChargerDetailsController(),
         builder: (controller) {
           return Scaffold(
             appBar: UiInterface().customAppBar(context, themeChange, "Select Date and Time".tr),
@@ -329,7 +330,7 @@ class BookingParkingDetailsScreen extends StatelessWidget {
                       ShowToastDialog.showToast("Please select duration minimum one hour".tr);
                     } else {
                       OrderModel orderModel = OrderModel();
-                      orderModel.parkingDetails = controller.parkingModel.value;
+                      orderModel.chargerDetails = controller.chargerModel.value;
                       orderModel.userVehicle = controller.vehicle.value;
                       orderModel.duration = controller.selectedDuration.value.toString();
                       orderModel.bookingDate =
@@ -339,11 +340,11 @@ class BookingParkingDetailsScreen extends StatelessWidget {
                       orderModel.status = Constant.placed;
                       orderModel.userId = FireStoreUtils.getCurrentUid();
                       orderModel.id = Constant.getUuid();
-                      orderModel.parkingId = controller.parkingModel.value.id;
-                      orderModel.subTotal = controller.calculateParkingAmount().toString();
+                      orderModel.chargerId = controller.chargerModel.value.id;
+                      orderModel.subTotal = controller.calculateChargerAmount().toString();
                       orderModel.taxList = Constant.taxList;
                       orderModel.userVehicle = controller.selectedVehicle.value;
-                      Get.to(() => const ParkingViewScreen(), arguments: {"orderModel": orderModel});
+                      Get.to(() => const ChargerViewScreen(), arguments: {"orderModel": orderModel});
                     }
                   },
                 ),

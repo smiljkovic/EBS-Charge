@@ -5,10 +5,10 @@ class ReviewModel {
   String? rating;
   String? id;
   String? customerId;
-  String? parkingId;
+  String? chargerId;
   Timestamp? date;
 
-  ReviewModel({this.comment, this.rating, this.id, this.date, this.customerId, this.parkingId});
+  ReviewModel({this.comment, this.rating, this.id, this.date, this.customerId, this.chargerId});
 
   ReviewModel.fromJson(Map<String, dynamic> json) {
     comment = json['comment'];
@@ -16,7 +16,7 @@ class ReviewModel {
     id = json['id'];
     date = json['date'];
     customerId = json['customerId'];
-    parkingId = json['parkingId'];
+    chargerId = json['chargerId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,7 +26,7 @@ class ReviewModel {
     data['id'] = id;
     data['date'] = date;
     data['customerId'] = customerId;
-    data['parkingId'] = parkingId;
+    data['chargerId'] = chargerId;
     return data;
   }
 }

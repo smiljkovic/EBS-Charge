@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smiljkovic/constant/constant.dart';
-import 'package:smiljkovic/controller/booking_parking_details_controller.dart';
+import 'package:smiljkovic/controller/booking_charger_details_controller.dart';
 import 'package:smiljkovic/controller/vehicle_list_controller.dart';
 import 'package:smiljkovic/model/user_vehicle_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
@@ -190,8 +190,8 @@ class SelectVehicleScreen extends StatelessWidget {
                         color: AppThemData.primary06,
                         fontSizes: 16,
                         onPress: () {
-                          BookingParkingDetailsController bookingParkingDetailsController = Get.put(BookingParkingDetailsController());
-                          bookingParkingDetailsController.selectedVehicle.value = controller.selectedVehicle.value;
+                          BookingChargerDetailsController bookingChargerDetailsController = Get.put(BookingChargerDetailsController());
+                          bookingChargerDetailsController.selectedVehicle.value = controller.selectedVehicle.value;
 
                           Get.back();
                         },

@@ -2,9 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/model/location_lat_lng.dart';
-import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:place_picker/place_picker.dart';
+
+import '../model/charger_model.dart';
 
 class SearchScreenController extends GetxController {
   Rx<TextEditingController> searchController = TextEditingController().obs;
@@ -12,47 +13,47 @@ class SearchScreenController extends GetxController {
 
   RxString selectedSortBy = 'distance'.tr.obs;
 
-  RxString parkingType = "2".obs;
+  RxString chargerType = "2".obs;
   RxDouble selectedKm = 2.0.obs;
 
-  void handleParkingChange(String? value) {
-    parkingType.value = value!;
+  void handleChargerChange(String? value) {
+    chargerType.value = value!;
   }
 
   @override
   void onInit() {
     // TODO: implement onInit
-    getParking();
+    getCharger();
     super.onInit();
   }
 
   RxBool isLoading = true.obs;
-  RxList<ParkingModel> parkingList = <ParkingModel>[].obs;
+  RxList<ChargerModel> chargersList = <ChargerModel>[].obs;
 
-  getParking() {
+  getCharger() {
     FireStoreUtils()
-        .getParkingNearest(latitude: latLng.value.latitude ?? Constant.currentLocation!.latitude, longLatitude: latLng.value.longitude ?? Constant.currentLocation!.longitude)
+        .getChargerNearest(latitude: latLng.value.latitude ?? Constant.currentLocation!.latitude, longLatitude: latLng.value.longitude ?? Constant.currentLocation!.longitude)
         .listen((event) {
-      parkingList.value = event;
+      chargersList.value = event;
     });
     isLoading.value = false;
   }
 
-  filterParking() {
+  filterCharger() {
     isLoading.value = true;
-    parkingList.clear();
+    chargersList.clear();
     FireStoreUtils()
-        .getFilterParking(
+        .getFilterCharger(
             latitude: latLng.value.latitude ?? Constant.currentLocation!.latitude,
             longLatitude: latLng.value.longitude ?? Constant.currentLocation!.longitude,
             distance: selectedSortBy.value == "distance".tr ? selectedKm.value.toString() : Constant.radius,
-            parkingType: parkingType.value)
+            chargerType: chargerType.value)
         .listen((event) {
-      parkingList.value = event;
+      chargersList.value = event;
       if (selectedSortBy.value == "higher_price".tr) {
-        parkingList.sort((b, a) => int.parse(a.perHrPrice!).compareTo(int.parse(b.perHrPrice.toString())));
+        chargersList.sort((b, a) => int.parse(a.perHrPrice!).compareTo(int.parse(b.perHrPrice.toString())));
       } else {
-        parkingList.sort((b, a) => int.parse(b.perHrPrice!).compareTo(int.parse(a.perHrPrice.toString())));
+        chargersList.sort((b, a) => int.parse(b.perHrPrice!).compareTo(int.parse(a.perHrPrice.toString())));
       }
     });
     isLoading.value = false;
