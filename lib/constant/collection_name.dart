@@ -5,7 +5,7 @@ class CollectionName {
   static const String currency = "currency";
   static const String languages = "languages";
   static const String settings = "settings";
-  static const String parking = "parkings";
+  static const String parking = "chargers";
   static const String facilities = "facilities";
   static const String brand = "vehicle_brand";
   static const String model = "vehicle_model";
