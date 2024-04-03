@@ -5,15 +5,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/constant/show_toast_dialog.dart';
 import 'package:smiljkovic/controller/saved_controller.dart';
-import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
 import 'package:smiljkovic/themes/common_ui.dart';
 import 'package:smiljkovic/themes/responsive.dart';
-import 'package:smiljkovic/ui/parking_details_screen/parking_details_screen.dart';
 import 'package:smiljkovic/utils/dark_theme_provider.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../../model/charger_model.dart';
+import '../charger_details_screen/charger_details_screen.dart';
 
 class SavedScreen extends StatelessWidget {
   const SavedScreen({super.key});
@@ -36,16 +37,16 @@ class SavedScreen extends StatelessWidget {
               child: controller.isLoading.value
                   ? Constant.loader()
                   : controller.bookMarkedList.isEmpty
-                      ? Constant.showEmptyView(message: "No Parking Found".tr)
+                      ? Constant.showEmptyView(message: "No chargers found".tr)
                       : ListView.separated(
                           itemCount: controller.bookMarkedList.length,
                           shrinkWrap: true,
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           itemBuilder: (context, int index) {
-                            ParkingModel parkingModel = controller.bookMarkedList[index];
+                            ChargerModel chargerModel = controller.bookMarkedList[index];
                             return InkWell(
                               onTap: () {
-                                Get.to(() => const ParkingDetailsScreen(), arguments: {"parkingModel": parkingModel});
+                                Get.to(() => const ChargerDetailsScreen(), arguments: {"chargerModel": chargerModel});
                               },
                               child: Container(
                                 height: Responsive.height(15, context),
@@ -60,7 +61,7 @@ class SavedScreen extends StatelessWidget {
                                         ClipRRect(
                                           borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)),
                                           child: NetworkImageWidget(
-                                            imageUrl: parkingModel.image.toString(),
+                                            imageUrl: chargerModel.image.toString(),
                                             height: Responsive.height(100, context),
                                             width: 110,
                                             fit: BoxFit.cover,
@@ -77,7 +78,7 @@ class SavedScreen extends StatelessWidget {
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        parkingModel.name.toString(),
+                                                        chargerModel.name.toString(),
                                                         style: TextStyle(
                                                           color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10,
                                                           fontSize: 14,
@@ -88,20 +89,20 @@ class SavedScreen extends StatelessWidget {
                                                     InkWell(
                                                         onTap: () async {
                                                           ShowToastDialog.showLoader("Please wait..".tr);
-                                                          if (parkingModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid())) {
-                                                            await FireStoreUtils.removeBookMarked(parkingModel).then((value) {
+                                                          if (chargerModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid())) {
+                                                            await FireStoreUtils.removeBookMarked(chargerModel).then((value) {
                                                               controller.getData();
                                                               ShowToastDialog.closeLoader();
                                                             });
                                                           } else {
-                                                            await FireStoreUtils.bookMarked(parkingModel).then((value) {
+                                                            await FireStoreUtils.bookMarked(chargerModel).then((value) {
                                                               controller.getData();
                                                               ShowToastDialog.closeLoader();
                                                             });
                                                           }
                                                         },
                                                         child: Icon(
-                                                            parkingModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid()) && parkingModel.bookmarkedUser != null
+                                                            chargerModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid()) && chargerModel.bookmarkedUser != null
                                                                 ? Icons.bookmark
                                                                 : Icons.bookmark_border,
                                                             color: AppThemData.primary08)),
@@ -111,7 +112,7 @@ class SavedScreen extends StatelessWidget {
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                  parkingModel.address.toString(),
+                                                  chargerModel.address.toString(),
                                                   maxLines: 2,
                                                   style: const TextStyle(color: AppThemData.grey07, fontSize: 12, fontFamily: AppThemData.regular, overflow: TextOverflow.ellipsis),
                                                 ),
@@ -123,7 +124,7 @@ class SavedScreen extends StatelessWidget {
                                                   children: [
                                                     FutureBuilder<String>(
                                                         future: controller.getDistance(LatLng(Constant.currentLocation!.latitude!, Constant.currentLocation!.longitude!),
-                                                            LatLng(parkingModel.location!.latitude!, parkingModel.location!.longitude!)),
+                                                            LatLng(chargerModel.location!.latitude!, chargerModel.location!.longitude!)),
                                                         builder: (context, snapshot) {
                                                           switch (snapshot.connectionState) {
                                                             case ConnectionState.waiting:
@@ -150,7 +151,7 @@ class SavedScreen extends StatelessWidget {
                                                         }),
                                                     const SizedBox(height: 10, child: VerticalDivider(thickness: 1, color: AppThemData.grey05)),
                                                     Text(
-                                                      "${Constant.amountShow(amount: parkingModel.perHrPrice.toString())}/hour".tr,
+                                                      "${Constant.amountShow(amount: chargerModel.perHrPrice.toString())}/hour".tr,
                                                       style: const TextStyle(
                                                         color: AppThemData.blueLight07,
                                                         fontSize: 12,
@@ -160,10 +161,10 @@ class SavedScreen extends StatelessWidget {
                                                     const SizedBox(height: 10, child: VerticalDivider(thickness: 1, color: AppThemData.grey05)),
                                                     Row(
                                                       children: [
-                                                        SvgPicture.asset(parkingModel.parkingType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
+                                                        SvgPicture.asset(chargerModel.chargerType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
                                                             color: AppThemData.blueLight07),
                                                         Text(
-                                                          " ${parkingModel.parkingType.toString()} wheel".tr,
+                                                          " ${chargerModel.chargerType.toString()} wheel".tr,
                                                           maxLines: 1,
                                                           style: const TextStyle(
                                                             color: AppThemData.blueLight07,
@@ -179,7 +180,7 @@ class SavedScreen extends StatelessWidget {
                                                 ),
                                                 InkWell(
                                                   onTap: () {
-                                                    Get.to(() => const ParkingDetailsScreen(), arguments: {"parkingModel": parkingModel});
+                                                    Get.to(() => const ChargerDetailsScreen(), arguments: {"chargerModel": chargerModel});
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets.symmetric(vertical: 5),
@@ -226,7 +227,7 @@ class SavedScreen extends StatelessWidget {
                                                 const Icon(Icons.star, size: 16, color: AppThemData.primary07),
                                                 const SizedBox(width: 5),
                                                 Text(
-                                                  Constant.calculateReview(reviewCount: parkingModel.reviewCount, reviewSum: parkingModel.reviewSum),
+                                                  Constant.calculateReview(reviewCount: chargerModel.reviewCount, reviewSum: chargerModel.reviewSum),
                                                   style: const TextStyle(color: AppThemData.grey10, fontFamily: AppThemData.semiBold),
                                                 ),
                                               ],

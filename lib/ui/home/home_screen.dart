@@ -9,14 +9,16 @@ import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
 import 'package:smiljkovic/themes/responsive.dart';
 import 'package:smiljkovic/themes/round_button_fill.dart';
-import 'package:smiljkovic/ui/booking_process/booking_parking_details_screen.dart';
+import 'package:smiljkovic/ui/booking_process/booking_charger_details_screen.dart';
 import 'package:smiljkovic/ui/chat/inbox_screen.dart';
-import 'package:smiljkovic/ui/parking_details_screen/parking_details_screen.dart';
 import 'package:smiljkovic/ui/search/search_screen.dart';
 import 'package:smiljkovic/utils/dark_theme_provider.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../../model/charger_model.dart';
+import '../charger_details_screen/charger_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -96,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            controller.parkingList.isEmpty
+                            controller.chargersList.isEmpty
                                 ? Container()
                                 : Align(
                                     alignment: Alignment.bottomCenter,
@@ -146,16 +148,16 @@ class HomeScreen extends StatelessWidget {
                                                 CameraUpdate cameraUpdate = CameraUpdate.newCameraPosition(CameraPosition(
                                                   zoom: 18,
                                                   target: LatLng(
-                                                    controller.parkingList[value].location!.latitude!,
-                                                    controller.parkingList[value].location!.longitude!,
+                                                    controller.chargersList[value].location!.latitude!,
+                                                    controller.chargersList[value].location!.longitude!,
                                                   ),
                                                 ));
                                                 controller.mapController!.animateCamera(cameraUpdate);
                                               },
-                                              itemCount: controller.parkingList.length,
+                                              itemCount: controller.chargersList.length,
                                               scrollDirection: Axis.horizontal,
                                               itemBuilder: (context, index) {
-                                                ParkingModel parkingModel = controller.parkingList[index];
+                                                ChargerModel chargerModel = controller.chargersList[index];
                                                 return Padding(
                                                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: index == 0 ? 0 : 10),
                                                   child: ClipRRect(
@@ -169,7 +171,7 @@ class HomeScreen extends StatelessWidget {
                                                               Expanded(
                                                                 child: SizedBox(
                                                                   width: Responsive.width(100, context),
-                                                                  child: NetworkImageWidget(imageUrl: parkingModel.image.toString()),
+                                                                  child: NetworkImageWidget(imageUrl: chargerModel.image.toString()),
                                                                 ),
                                                               ),
                                                               Padding(
@@ -182,7 +184,7 @@ class HomeScreen extends StatelessWidget {
                                                                       children: [
                                                                         Expanded(
                                                                           child: Text(
-                                                                            parkingModel.name.toString(),
+                                                                            chargerModel.name.toString(),
                                                                             style: TextStyle(
                                                                               color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10,
                                                                               fontSize: 16,
@@ -193,7 +195,7 @@ class HomeScreen extends StatelessWidget {
                                                                           ),
                                                                         ),
                                                                         Text(
-                                                                          "${Constant.amountShow(amount: parkingModel.perHrPrice.toString())} / hour",
+                                                                          "${Constant.amountShow(amount: chargerModel.perHrPrice.toString())} / hour",
                                                                           style: const TextStyle(
                                                                             color: AppThemData.blueLight07,
                                                                             fontSize: 14,
@@ -208,7 +210,7 @@ class HomeScreen extends StatelessWidget {
                                                                       children: [
                                                                         Expanded(
                                                                           child: Text(
-                                                                            parkingModel.address.toString(),
+                                                                            chargerModel.address.toString(),
                                                                             maxLines: 1,
                                                                             style: const TextStyle(
                                                                               color: AppThemData.grey07,
@@ -226,10 +228,10 @@ class HomeScreen extends StatelessWidget {
                                                                         Row(
                                                                           children: [
                                                                             SvgPicture.asset(
-                                                                                parkingModel.parkingType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
+                                                                                chargerModel.chargerType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
                                                                                 color: AppThemData.grey09),
                                                                             Text(
-                                                                              " ${parkingModel.parkingType.toString()} wheel".tr,
+                                                                              " ${chargerModel.chargerType.toString()} wheel".tr,
                                                                               maxLines: 1,
                                                                               style: TextStyle(
                                                                                 color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
@@ -255,10 +257,10 @@ class HomeScreen extends StatelessWidget {
                                                                             color: AppThemData.primary06,
                                                                             fontSizes: 12,
                                                                             onPress: () {
-                                                                              if (parkingModel.userId == FireStoreUtils.getCurrentUid()) {
-                                                                                ShowToastDialog.showToast("You can't book your own parking.");
+                                                                              if (chargerModel.userId == FireStoreUtils.getCurrentUid()) {
+                                                                                ShowToastDialog.showToast("You can't book your own charger.");
                                                                               } else {
-                                                                                Get.to(() => const BookingParkingDetailsScreen(), arguments: {"parkingModel": parkingModel});
+                                                                                Get.to(() => const BookingChargerDetailsScreen(), arguments: {"chargerModel": chargerModel});
                                                                               }
                                                                             },
                                                                           ),
@@ -276,7 +278,7 @@ class HomeScreen extends StatelessWidget {
                                                                             fontSizes: 12,
                                                                             isRight: true,
                                                                             onPress: () {
-                                                                              Get.to(() => const ParkingDetailsScreen(), arguments: {"parkingModel": parkingModel});
+                                                                              Get.to(() => const ChargerDetailsScreen(), arguments: {"chargerModel": chargerModel});
                                                                             },
                                                                           ),
                                                                         )
@@ -305,7 +307,7 @@ class HomeScreen extends StatelessWidget {
                                                                       const Icon(Icons.star, size: 16, color: AppThemData.primary07),
                                                                       const SizedBox(width: 5),
                                                                       Text(
-                                                                        Constant.calculateReview(reviewCount: parkingModel.reviewCount, reviewSum: parkingModel.reviewSum),
+                                                                        Constant.calculateReview(reviewCount: chargerModel.reviewCount, reviewSum: chargerModel.reviewSum),
                                                                         style: const TextStyle(color: AppThemData.grey10, fontFamily: AppThemData.semiBold),
                                                                       ),
                                                                     ],

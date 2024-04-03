@@ -16,6 +16,8 @@ import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/charger_model.dart';
+
 class ReviewScreen extends StatelessWidget {
   const ReviewScreen({super.key});
 
@@ -46,7 +48,7 @@ class ReviewScreen extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: NetworkImageWidget(
-                              imageUrl: controller.parkingModel.value.image.toString(),
+                              imageUrl: controller.chargerModel.value.image.toString(),
                               height: Responsive.width(26, context),
                               width: Responsive.width(26, context),
                             ),
@@ -56,7 +58,7 @@ class ReviewScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          '${controller.parkingModel.value.name}',
+                          '${controller.chargerModel.value.name}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(color: AppThemData.grey10, fontFamily: AppThemData.medium, fontSize: 18),
                         ),
@@ -155,17 +157,17 @@ class ReviewScreen extends StatelessWidget {
                   onPress: () async {
                     ShowToastDialog.showLoader("Please wait".tr);
 
-                    await FireStoreUtils.getParkingDetails(controller.orderModel.value.parkingId.toString()).then((value) async {
+                    await FireStoreUtils.getChargerDetails(controller.orderModel.value.chargerId.toString()).then((value) async {
                       if (value != null) {
-                        ParkingModel parkingModel = value;
+                        ChargerModel chargerModel = value;
 
                         if (controller.reviewModel.value.id != null) {
-                          parkingModel.reviewSum = (double.parse(parkingModel.reviewSum.toString()) - double.parse(controller.reviewModel.value.rating.toString())).toString();
-                          parkingModel.reviewCount = (double.parse(parkingModel.reviewCount.toString()) - 1).toString();
+                          chargerModel.reviewSum = (double.parse(chargerModel.reviewSum.toString()) - double.parse(controller.reviewModel.value.rating.toString())).toString();
+                          chargerModel.reviewCount = (double.parse(chargerModel.reviewCount.toString()) - 1).toString();
                         }
-                        parkingModel.reviewSum = (double.parse(parkingModel.reviewSum.toString()) + double.parse(controller.rating.value.toString())).toString();
-                        parkingModel.reviewCount = (double.parse(parkingModel.reviewCount.toString()) + 1).toString();
-                        await FireStoreUtils.saveParkingDetails(parkingModel);
+                        chargerModel.reviewSum = (double.parse(chargerModel.reviewSum.toString()) + double.parse(controller.rating.value.toString())).toString();
+                        chargerModel.reviewCount = (double.parse(chargerModel.reviewCount.toString()) + 1).toString();
+                        await FireStoreUtils.saveChargerDetails(chargerModel);
                       }
                     });
 
@@ -173,7 +175,7 @@ class ReviewScreen extends StatelessWidget {
                     controller.reviewModel.value.comment = controller.commentController.value.text;
                     controller.reviewModel.value.rating = controller.rating.value.toString();
                     controller.reviewModel.value.customerId = FireStoreUtils.getCurrentUid();
-                    controller.reviewModel.value.parkingId = controller.orderModel.value.parkingId;
+                    controller.reviewModel.value.chargerId = controller.orderModel.value.chargerId;
                     controller.reviewModel.value.date = Timestamp.now();
 
                     await FireStoreUtils.setReview(controller.reviewModel.value).then((value) {

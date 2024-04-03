@@ -3,30 +3,30 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/constant/show_toast_dialog.dart';
-import 'package:smiljkovic/controller/parking_details_controller.dart';
+import 'package:smiljkovic/controller/charger_details_controller.dart';
 import 'package:smiljkovic/model/parking_facilities_model.dart';
 import 'package:smiljkovic/model/user_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
 import 'package:smiljkovic/themes/common_ui.dart';
 import 'package:smiljkovic/themes/round_button_fill.dart';
-import 'package:smiljkovic/ui/booking_process/booking_parking_details_screen.dart';
+import 'package:smiljkovic/ui/booking_process/booking_charger_details_screen.dart';
 import 'package:smiljkovic/ui/chat/chat_screen.dart';
 import 'package:smiljkovic/utils/dark_theme_provider.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
 import 'package:provider/provider.dart';
 
-class ParkingDetailsScreen extends StatelessWidget {
-  const ParkingDetailsScreen({super.key});
+class ChargerDetailsScreen extends StatelessWidget {
+  const ChargerDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
-    return GetX<ParkingDetailsController>(
-        init: ParkingDetailsController(),
+    return GetX<ChargerDetailsController>(
+        init: ChargerDetailsController(),
         builder: (controller) {
           return Scaffold(
-            appBar: UiInterface().customAppBar(context, themeChange, "parking_details".tr),
+            appBar: UiInterface().customAppBar(context, themeChange, "charger_details".tr),
             body: controller.isLoading.value
                 ? Constant.loader()
                 : SingleChildScrollView(
@@ -40,7 +40,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: NetworkImageWidget(
-                                  imageUrl: controller.parkingModel.value.image.toString(),
+                                  imageUrl: controller.chargerModel.value.image.toString(),
                                   height: 180,
                                   width: Get.width,
                                   fit: BoxFit.cover,
@@ -52,21 +52,21 @@ class ParkingDetailsScreen extends StatelessWidget {
                                 child: InkWell(
                                     onTap: () async {
                                       ShowToastDialog.showLoader("Please wait..".tr);
-                                      if (controller.parkingModel.value.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid())) {
-                                        await FireStoreUtils.removeBookMarked(controller.parkingModel.value).then((value) {
+                                      if (controller.chargerModel.value.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid())) {
+                                        await FireStoreUtils.removeBookMarked(controller.chargerModel.value).then((value) {
                                           controller.getData();
                                           ShowToastDialog.closeLoader();
                                         });
                                       } else {
-                                        await FireStoreUtils.bookMarked(controller.parkingModel.value).then((value) {
+                                        await FireStoreUtils.bookMarked(controller.chargerModel.value).then((value) {
                                           controller.getData();
                                           ShowToastDialog.closeLoader();
                                         });
                                       }
                                     },
                                     child: Icon(
-                                        controller.parkingModel.value.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid()) &&
-                                                controller.parkingModel.value.bookmarkedUser != null
+                                        controller.chargerModel.value.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid()) &&
+                                                controller.chargerModel.value.bookmarkedUser != null
                                             ? Icons.bookmark
                                             : Icons.bookmark_border,
                                         color: AppThemData.white)),
@@ -86,7 +86,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                                           const Icon(Icons.star, size: 16, color: AppThemData.primary07),
                                           const SizedBox(width: 5),
                                           Text(
-                                            Constant.calculateReview(reviewCount: controller.parkingModel.value.reviewCount, reviewSum: controller.parkingModel.value.reviewSum),
+                                            Constant.calculateReview(reviewCount: controller.chargerModel.value.reviewCount, reviewSum: controller.chargerModel.value.reviewSum),
                                             style: const TextStyle(color: AppThemData.grey10, fontFamily: AppThemData.semiBold),
                                           ),
                                         ],
@@ -106,7 +106,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      controller.parkingModel.value.name.toString(),
+                                      controller.chargerModel.value.name.toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
@@ -126,7 +126,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            controller.parkingModel.value.address.toString(),
+                                            controller.chargerModel.value.address.toString(),
                                             textAlign: TextAlign.start,
                                             style: const TextStyle(
                                               color: AppThemData.grey07,
@@ -146,7 +146,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                               InkWell(
                                   onTap: () async {
                                     ShowToastDialog.showLoader("Please wait".tr);
-                                    UserModel? userModel = await FireStoreUtils.getUserProfile(controller.parkingModel.value.userId.toString());
+                                    UserModel? userModel = await FireStoreUtils.getUserProfile(controller.chargerModel.value.userId.toString());
                                     ShowToastDialog.closeLoader();
                                     Constant.makePhoneCall("${userModel!.countryCode}${userModel.phoneNumber}");
                                   },
@@ -156,7 +156,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                               ),
                               InkWell(
                                   onTap: () async {
-                                    await FireStoreUtils.getUserProfile(controller.parkingModel.value.userId.toString()).then((value) {
+                                    await FireStoreUtils.getUserProfile(controller.chargerModel.value.userId.toString()).then((value) {
                                       UserModel userModel = value!;
                                       Get.to(const ChatScreen(), arguments: {"receiverModel": userModel});
                                     });
@@ -192,7 +192,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [
-                                boxDecoration("${controller.parkingModel.value.parkingSpace.toString()} Spots".tr, themeChange, Icons.local_parking),
+                                boxDecoration("${controller.chargerModel.value.numChargers.toString()} Spots".tr, themeChange, Icons.local_parking),
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -224,7 +224,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            controller.parkingModel.value.description.toString(),
+                            controller.chargerModel.value.description.toString(),
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: AppThemData.regular,
@@ -253,8 +253,8 @@ class ParkingDetailsScreen extends StatelessWidget {
                           Wrap(
                             spacing: 6.0,
                             runSpacing: 6.0,
-                            children: List<Widget>.generate(controller.parkingModel.value.facilities!.length, (int index) {
-                              ParkingFacilitiesModel parkingFacility = controller.parkingModel.value.facilities![index];
+                            children: List<Widget>.generate(controller.chargerModel.value.facilities!.length, (int index) {
+                              ParkingFacilitiesModel parkingFacility = controller.chargerModel.value.facilities![index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 6),
                                 child: Row(
@@ -305,7 +305,7 @@ class ParkingDetailsScreen extends StatelessWidget {
                                   height: 8,
                                 ),
                                 Text(
-                                  Constant.amountShow(amount: controller.parkingModel.value.perHrPrice.toString()),
+                                  Constant.amountShow(amount: controller.chargerModel.value.perHrPrice.toString()),
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: AppThemData.semiBold,
@@ -324,14 +324,14 @@ class ParkingDetailsScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: RoundedButtonFill(
-                  title: "Book Parking".tr,
+                  title: "Book charger".tr,
                   color: AppThemData.primary06,
                   fontSizes: 12,
                   onPress: () {
-                    if (controller.parkingModel.value.userId == FireStoreUtils.getCurrentUid()) {
-                      ShowToastDialog.showToast("You can't book your own parking.");
+                    if (controller.chargerModel.value.userId == FireStoreUtils.getCurrentUid()) {
+                      ShowToastDialog.showToast("You can't book your own charger.");
                     } else {
-                      Get.to(() => const BookingParkingDetailsScreen(), arguments: {"parkingModel": controller.parkingModel.value});
+                      Get.to(() => const BookingChargerDetailsScreen(), arguments: {"chargerModel": controller.chargerModel.value});
                     }
                   },
                 ),

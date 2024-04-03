@@ -5,11 +5,13 @@ import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/model/tax_model.dart';
 import 'package:smiljkovic/model/user_vehicle_model.dart';
 
+import 'charger_model.dart';
+
 class OrderModel {
   String? id;
   String? userId;
-  String? parkingId;
-  String? parkingSlotId;
+  String? chargerId;
+  String? chargerSlotId;
   Timestamp? bookingDate;
   Timestamp? bookingStartTime;
   Timestamp? bookingEndTime;
@@ -19,7 +21,7 @@ class OrderModel {
   String? subTotal;
   bool? paymentCompleted;
   UserVehicleModel? userVehicle;
-  ParkingModel? parkingDetails;
+  ChargerModel? chargerDetails;
   List<TaxModel>? taxList;
   AdminCommission? adminCommission;
   CouponModel? coupon;
@@ -29,8 +31,8 @@ class OrderModel {
   OrderModel({
     this.id,
     this.userId,
-    this.parkingId,
-    this.parkingSlotId,
+    this.chargerId,
+    this.chargerSlotId,
     this.bookingDate,
     this.bookingStartTime,
     this.bookingEndTime,
@@ -40,7 +42,7 @@ class OrderModel {
     this.subTotal,
     this.paymentCompleted,
     this.userVehicle,
-    this.parkingDetails,
+    this.chargerDetails,
     this.taxList,
     this.adminCommission,
     this.coupon,
@@ -51,8 +53,8 @@ class OrderModel {
   OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
-    parkingId = json['parkingId'];
-    parkingSlotId = json['parkingSlotId'];
+    chargerId = json['chargerId'];
+    chargerSlotId = json['chargerSlotId'];
     bookingDate = json['bookingDate'];
     bookingStartTime = json['bookingStartTime'];
     bookingEndTime = json['bookingEndTime'];
@@ -62,7 +64,7 @@ class OrderModel {
     subTotal = json['subTotal'];
     paymentCompleted = json['paymentCompleted'];
     userVehicle = json['userVehicle'] != null ? UserVehicleModel.fromJson(json['userVehicle']) : null;
-    parkingDetails = json['parkingDetails'] != null ? ParkingModel.fromJson(json['parkingDetails']) : null;
+    chargerDetails = json['chargerDetails'] != null ? ChargerModel.fromJson(json['chargerDetails']) : null;
     if (json['taxList'] != null) {
       taxList = <TaxModel>[];
       json['taxList'].forEach((v) {
@@ -79,8 +81,8 @@ class OrderModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['userId'] = userId;
-    data['parkingId'] = parkingId;
-    data['parkingSlotId'] = parkingSlotId;
+    data['chargerId'] = chargerId;
+    data['chargerSlotId'] = chargerSlotId;
     data['bookingDate'] = bookingDate;
     data['bookingStartTime'] = bookingStartTime;
     data['bookingEndTime'] = bookingEndTime;
@@ -93,8 +95,8 @@ class OrderModel {
     if (userVehicle != null) {
       data['userVehicle'] = userVehicle!.toJson();
     }
-    if (parkingDetails != null) {
-      data['parkingDetails'] = parkingDetails!.toJson();
+    if (chargerDetails != null) {
+      data['chargerDetails'] = chargerDetails!.toJson();
     }
     if (taxList != null) {
       data['taxList'] = taxList!.map((v) => v.toJson()).toList();

@@ -4,7 +4,7 @@ import 'package:smiljkovic/constant/constant.dart';
 import 'package:smiljkovic/constant/send_notification.dart';
 import 'package:smiljkovic/constant/show_toast_dialog.dart';
 import 'package:smiljkovic/controller/dashboard_controller.dart';
-import 'package:smiljkovic/controller/parking_ticket_controller.dart';
+import 'package:smiljkovic/controller/charger_ticket_controller.dart';
 import 'package:smiljkovic/model/tax_model.dart';
 import 'package:smiljkovic/model/user_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
@@ -20,14 +20,14 @@ import 'package:smiljkovic/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class ParkingTicketScreen extends StatelessWidget {
-  const ParkingTicketScreen({super.key});
+class ChargerTicketScreen extends StatelessWidget {
+  const ChargerTicketScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return GetX(
-        init: ParkingTicketController(),
+        init: ChargerTicketController(),
         builder: (controller) {
           return Scaffold(
             backgroundColor: themeChange.getThem() ? AppThemData.warning06 : AppThemData.warning06,
@@ -62,7 +62,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                   ClipRRect(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                                     child: NetworkImageWidget(
-                                      imageUrl: controller.orderModel.value.parkingDetails!.image.toString(),
+                                      imageUrl: controller.orderModel.value.chargerDetails!.image.toString(),
                                       height: Responsive.height(12, context),
                                       width: Responsive.height(100, context),
                                     ),
@@ -71,7 +71,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Text(
-                                    controller.orderModel.value.parkingDetails!.name.toString(),
+                                    controller.orderModel.value.chargerDetails!.name.toString(),
                                     style: TextStyle(
                                       color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
                                       fontSize: 18,
@@ -90,7 +90,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          controller.orderModel.value.parkingDetails!.address.toString(),
+                                          controller.orderModel.value.chargerDetails!.address.toString(),
                                           style: const TextStyle(
                                             color: AppThemData.grey07,
                                             fontSize: 14,
@@ -132,7 +132,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        'Parking Spot'.tr,
+                                        'Charger Spot'.tr,
                                         style: const TextStyle(
                                           color: AppThemData.grey07,
                                           fontSize: 14,
@@ -143,7 +143,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                         width: 5,
                                       ),
                                       Text(
-                                        controller.orderModel.value.parkingSlotId.toString(),
+                                        controller.orderModel.value.chargerSlotId.toString(),
                                         style: TextStyle(
                                           color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
                                           fontSize: 14,
@@ -168,7 +168,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          'Scan this on the scanner machine when you are in the parking slot'.tr,
+                                          'Scan this on the scanner machine when you are in the charger slot'.tr,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 14,
@@ -382,7 +382,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                   //   height: 20,
                                   // ),
                                   RoundedButtonFill(
-                                    title: "Navigate the Parking Slot".tr,
+                                    title: "Navigate the Charger Slot".tr,
                                     height: 6,
                                     color: AppThemData.primary06,
                                     fontSizes: 16,
@@ -392,9 +392,9 @@ class ParkingTicketScreen extends StatelessWidget {
                                         Get.to(() => const LiveTrackingScreen(), arguments: {"orderModel": controller.orderModel.value});
                                       } else {
                                         Utils.redirectMap(
-                                            latitude: controller.orderModel.value.parkingDetails!.location!.latitude!,
-                                            longLatitude: controller.orderModel.value.parkingDetails!.location!.longitude!,
-                                            name: controller.orderModel.value.parkingDetails!.name.toString());
+                                            latitude: controller.orderModel.value.chargerDetails!.location!.latitude!,
+                                            longLatitude: controller.orderModel.value.chargerDetails!.location!.longitude!,
+                                            name: controller.orderModel.value.chargerDetails!.name.toString());
                                       }
                                     },
                                   ),
@@ -409,7 +409,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                     onPress: () async {
                                       ShowToastDialog.showLoader("Please wait".tr);
                                       controller.orderModel.value.status = Constant.canceled;
-                                      UserModel? receiverUserModel = await FireStoreUtils.getUserProfile(controller.orderModel.value.parkingDetails!.userId.toString());
+                                      UserModel? receiverUserModel = await FireStoreUtils.getUserProfile(controller.orderModel.value.chargerDetails!.userId.toString());
 
                                       Map<String, dynamic> playLoad = <String, dynamic>{"type": "order", "orderId": controller.orderModel.value.id};
 
@@ -417,7 +417,7 @@ class ParkingTicketScreen extends StatelessWidget {
                                           token: receiverUserModel!.fcmToken.toString(),
                                           title: 'Booking Canceled'.tr,
                                           body:
-                                              '${controller.orderModel.value.parkingDetails!.name.toString()} Booking canceled on ${Constant.timestampToDate(controller.orderModel.value.bookingDate!)}.'
+                                              '${controller.orderModel.value.chargerDetails!.name.toString()} Booking canceled on ${Constant.timestampToDate(controller.orderModel.value.bookingDate!)}.'
                                                   .tr,
                                           payload: playLoad);
 

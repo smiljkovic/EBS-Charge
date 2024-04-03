@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smiljkovic/constant/constant.dart';
+import 'package:smiljkovic/model/charger_model.dart';
 import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 
@@ -9,7 +10,7 @@ class SavedController extends GetxController {
   Rx<TextEditingController> searchController = TextEditingController().obs;
 
   RxBool isLoading = true.obs;
-  RxList<ParkingModel> bookMarkedList = <ParkingModel>[].obs;
+  RxList<ChargerModel> bookMarkedList = <ChargerModel>[].obs;
 
   @override
   void onInit() {

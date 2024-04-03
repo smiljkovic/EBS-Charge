@@ -14,7 +14,7 @@ class CurrencyModel {
   CurrencyModel({this.createdAt, this.symbol, this.code, this.enable, this.symbolAtRight, this.name, this.decimalDigits, this.id, this.updatedAt});
 
   CurrencyModel.fromJson(Map<String, dynamic> json) {
-    createdAt = json['createdAt'];
+    createdAt = Timestamp(json['createdAt']['_seconds'], json['createdAt']['_nanoseconds']);
     symbol = json['symbol'];
     code = json['code'];
     enable = json['enable'];
@@ -22,7 +22,7 @@ class CurrencyModel {
     name = json['name'];
     decimalDigits = json['decimalDigits'] != null ? int.parse(json['decimalDigits'].toString()) : 2;
     id = json['id'];
-    updatedAt = json['updatedAt'];
+    updatedAt = Timestamp(json['updatedAt']['_seconds'], json['updatedAt']['_nanoseconds']);
   }
 
   Map<String, dynamic> toJson() {

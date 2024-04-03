@@ -9,13 +9,16 @@ import 'package:smiljkovic/model/parking_model.dart';
 import 'package:smiljkovic/themes/app_them_data.dart';
 import 'package:smiljkovic/themes/responsive.dart';
 import 'package:smiljkovic/themes/round_button_fill.dart';
-import 'package:smiljkovic/ui/parking_details_screen/parking_details_screen.dart';
+
 import 'package:smiljkovic/utils/dark_theme_provider.dart';
 import 'package:smiljkovic/utils/fire_store_utils.dart';
 import 'package:smiljkovic/utils/network_image_widget.dart';
 import 'package:smiljkovic/utils/utils.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../../model/charger_model.dart';
+import '../charger_details_screen/charger_details_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -38,7 +41,7 @@ class SearchScreen extends StatelessWidget {
                   if (value != null) {
                     controller.searchController.value.text = value.formattedAddress.toString();
                     controller.latLng.value = LocationLatLng(latitude: value.latLng!.latitude, longitude: value.latLng!.longitude);
-                    controller.getParking();
+                    controller.getCharger();
                   }
                 });
               },
@@ -86,17 +89,17 @@ class SearchScreen extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: controller.parkingList.isEmpty
-                            ? Constant.showEmptyView(message: "No Parking Found".tr)
+                        child: controller.chargersList.isEmpty
+                            ? Constant.showEmptyView(message: "No chargers found".tr)
                             : ListView.separated(
-                                itemCount: controller.parkingList.length,
+                                itemCount: controller.chargersList.length,
                                 shrinkWrap: true,
                                 padding: EdgeInsets.zero,
                                 itemBuilder: (context, int index) {
-                                  ParkingModel parkingModel = controller.parkingList[index];
+                                  ChargerModel chargerModel = controller.chargersList[index];
                                   return InkWell(
                                     onTap: () {
-                                      Get.to(() => const ParkingDetailsScreen(), arguments: {"parkingModel": parkingModel});
+                                      Get.to(() => const ChargerDetailsScreen(), arguments: {"chargerModel": chargerModel});
                                     },
                                     child: Container(
                                       height: Responsive.height(15, context),
@@ -111,7 +114,7 @@ class SearchScreen extends StatelessWidget {
                                               ClipRRect(
                                                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)),
                                                 child: NetworkImageWidget(
-                                                  imageUrl: parkingModel.image.toString(),
+                                                  imageUrl: chargerModel.image.toString(),
                                                   height: Responsive.height(100, context),
                                                   width: 110,
                                                   fit: BoxFit.cover,
@@ -128,7 +131,7 @@ class SearchScreen extends StatelessWidget {
                                                         children: [
                                                           Expanded(
                                                             child: Text(
-                                                              parkingModel.name.toString(),
+                                                              chargerModel.name.toString(),
                                                               style: TextStyle(
                                                                 color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10,
                                                                 fontSize: 14,
@@ -139,20 +142,20 @@ class SearchScreen extends StatelessWidget {
                                                           InkWell(
                                                               onTap: () async {
                                                                 ShowToastDialog.showLoader("Please wait..".tr);
-                                                                if (parkingModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid())) {
-                                                                  await FireStoreUtils.removeBookMarked(parkingModel).then((value) {
-                                                                    controller.getParking();
+                                                                if (chargerModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid())) {
+                                                                  await FireStoreUtils.removeBookMarked(chargerModel).then((value) {
+                                                                    controller.getCharger();
                                                                     ShowToastDialog.closeLoader();
                                                                   });
                                                                 } else {
-                                                                  await FireStoreUtils.bookMarked(parkingModel).then((value) {
-                                                                    controller.getParking();
+                                                                  await FireStoreUtils.bookMarked(chargerModel).then((value) {
+                                                                    controller.getCharger();
                                                                     ShowToastDialog.closeLoader();
                                                                   });
                                                                 }
                                                               },
                                                               child: Icon(
-                                                                  parkingModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid()) && parkingModel.bookmarkedUser != null
+                                                                  chargerModel.bookmarkedUser!.contains(FireStoreUtils.getCurrentUid()) && chargerModel.bookmarkedUser != null
                                                                       ? Icons.bookmark
                                                                       : Icons.bookmark_border,
                                                                   color: AppThemData.primary08)),
@@ -162,7 +165,7 @@ class SearchScreen extends StatelessWidget {
                                                         height: 5,
                                                       ),
                                                       Text(
-                                                        parkingModel.address.toString(),
+                                                        chargerModel.address.toString(),
                                                         maxLines: 2,
                                                         style: const TextStyle(
                                                             color: AppThemData.grey07, fontSize: 12, fontFamily: AppThemData.regular, overflow: TextOverflow.ellipsis),
@@ -174,7 +177,7 @@ class SearchScreen extends StatelessWidget {
                                                         children: [
                                                           FutureBuilder<String>(
                                                               future: controller.getDistance(LatLng(Constant.currentLocation!.latitude!, Constant.currentLocation!.longitude!),
-                                                                  LatLng(parkingModel.location!.latitude!, parkingModel.location!.longitude!)),
+                                                                  LatLng(chargerModel.location!.latitude!, chargerModel.location!.longitude!)),
                                                               builder: (context, snapshot) {
                                                                 switch (snapshot.connectionState) {
                                                                   case ConnectionState.waiting:
@@ -201,7 +204,7 @@ class SearchScreen extends StatelessWidget {
                                                               }),
                                                           const SizedBox(height: 10, child: VerticalDivider(thickness: 1, color: AppThemData.grey05)),
                                                           Text(
-                                                            "${Constant.amountShow(amount: parkingModel.perHrPrice.toString())}/hr",
+                                                            "${Constant.amountShow(amount: chargerModel.perHrPrice.toString())}/hr",
                                                             style: const TextStyle(
                                                               color: AppThemData.blueLight07,
                                                               fontSize: 12,
@@ -211,10 +214,10 @@ class SearchScreen extends StatelessWidget {
                                                           const SizedBox(height: 10, child: VerticalDivider(thickness: 1, color: AppThemData.grey05)),
                                                           Row(
                                                             children: [
-                                                              SvgPicture.asset(parkingModel.parkingType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
+                                                              SvgPicture.asset(chargerModel.chargerType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
                                                                   color: AppThemData.blueLight07),
                                                               Text(
-                                                                " ${parkingModel.parkingType.toString()} wheel".tr,
+                                                                " ${chargerModel.chargerType.toString()} wheel".tr,
                                                                 maxLines: 1,
                                                                 style: const TextStyle(
                                                                   color: AppThemData.blueLight07,
@@ -230,7 +233,7 @@ class SearchScreen extends StatelessWidget {
                                                       ),
                                                       InkWell(
                                                         onTap: () {
-                                                          Get.to(() => const ParkingDetailsScreen(), arguments: {"parkingModel": parkingModel});
+                                                          Get.to(() => const ChargerDetailsScreen(), arguments: {"chargerModel": chargerModel});
                                                         },
                                                         child: Padding(
                                                           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -277,7 +280,7 @@ class SearchScreen extends StatelessWidget {
                                                       const Icon(Icons.star, size: 16, color: AppThemData.primary07),
                                                       const SizedBox(width: 5),
                                                       Text(
-                                                        Constant.calculateReview(reviewCount: parkingModel.reviewCount, reviewSum: parkingModel.reviewSum),
+                                                        Constant.calculateReview(reviewCount: chargerModel.reviewCount, reviewSum: chargerModel.reviewSum),
                                                         style: const TextStyle(color: AppThemData.grey10, fontFamily: AppThemData.semiBold),
                                                       ),
                                                     ],
@@ -504,7 +507,7 @@ class SearchScreen extends StatelessWidget {
                                   child: Divider(color: themeChange.getThem() ? AppThemData.grey10 : AppThemData.grey03, thickness: 1),
                                 ),
                                 Text(
-                                  'Choose Parking Type'.tr,
+                                  'Choose Charger Type'.tr,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: AppThemData.medium,
@@ -529,14 +532,14 @@ class SearchScreen extends StatelessWidget {
                                     )),
                                     Radio<String>(
                                       value: "2",
-                                      groupValue: controller.parkingType.value,
+                                      groupValue: controller.chargerType.value,
                                       activeColor: AppThemData.primary07,
                                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                       visualDensity: const VisualDensity(
                                         horizontal: VisualDensity.minimumDensity,
                                         vertical: VisualDensity.minimumDensity,
                                       ),
-                                      onChanged: controller.handleParkingChange,
+                                      onChanged: controller.handleChargerChange,
                                     ),
                                   ],
                                 ),
@@ -563,9 +566,9 @@ class SearchScreen extends StatelessWidget {
                                         horizontal: VisualDensity.minimumDensity,
                                         vertical: VisualDensity.minimumDensity,
                                       ),
-                                      groupValue: controller.parkingType.value,
+                                      groupValue: controller.chargerType.value,
                                       activeColor: AppThemData.primary07,
-                                      onChanged: controller.handleParkingChange,
+                                      onChanged: controller.handleChargerChange,
                                     ),
                                   ],
                                 ),
@@ -639,7 +642,7 @@ class SearchScreen extends StatelessWidget {
                               fontSizes: 16,
                               onPress: () async {
                                 Get.back();
-                                controller.filterParking();
+                                controller.filterCharger();
                               },
                             )),
                           ],

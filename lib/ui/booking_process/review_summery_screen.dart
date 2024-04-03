@@ -49,7 +49,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Parking ID'.tr,
+                                  'Charger ID'.tr,
                                   style: const TextStyle(
                                     color: AppThemData.grey07,
                                     fontSize: 14,
@@ -73,7 +73,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               FlutterClipboard.copy(controller.orderModel.value.id.toString()).then((value) {
-                                ShowToastDialog.showToast("Parking ID copied".tr);
+                                ShowToastDialog.showToast("Charger ID copied".tr);
                               });
                             },
                             child: SvgPicture.asset(
@@ -104,7 +104,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Parking Info'.tr,
+                                  'Charger Info'.tr,
                                   style: const TextStyle(
                                     color: AppThemData.grey07,
                                     fontSize: 16,
@@ -135,7 +135,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                                   height: 24,
                                 ),
                                 Text(
-                                  controller.orderModel.value.parkingDetails!.name.toString(),
+                                  controller.orderModel.value.chargerDetails!.name.toString(),
                                   style: TextStyle(
                                     color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
                                     fontSize: 18,
@@ -157,7 +157,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        controller.orderModel.value.parkingDetails!.address.toString(),
+                                        controller.orderModel.value.chargerDetails!.address.toString(),
                                         style: const TextStyle(
                                           color: AppThemData.grey07,
                                           fontSize: 14,
@@ -219,7 +219,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                controller.orderModel.value.parkingSlotId.toString(),
+                                                controller.orderModel.value.chargerSlotId.toString(),
                                                 style: TextStyle(
                                                   color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
                                                   fontSize: 16,
@@ -230,7 +230,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                                                 height: 5,
                                               ),
                                               Text(
-                                                "Parking Slot".tr,
+                                                "Charger Slot".tr,
                                                 style: const TextStyle(
                                                   color: AppThemData.grey07,
                                                   fontSize: 12,
@@ -339,7 +339,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                                           ),
                                           isRight: false,
                                           onPress: () async {
-                                            await FireStoreUtils.getUserProfile(controller.orderModel.value.parkingDetails!.userId.toString()).then((value) {
+                                            await FireStoreUtils.getUserProfile(controller.orderModel.value.chargerDetails!.userId.toString()).then((value) {
                                               UserModel userModel = value!;
                                               Get.to(const ChatScreen(), arguments: {"receiverModel": userModel});
                                             });
@@ -358,7 +358,7 @@ class ReviewSummaryScreen extends StatelessWidget {
                                           icon: SvgPicture.asset("assets/icon/ic_call_support.svg", color: themeChange.getThem() ? AppThemData.grey01 : AppThemData.grey10),
                                           onPress: () async {
                                             ShowToastDialog.showLoader("Please wait".tr);
-                                            UserModel? userModel = await FireStoreUtils.getUserProfile(controller.orderModel.value.parkingDetails!.userId!.toString());
+                                            UserModel? userModel = await FireStoreUtils.getUserProfile(controller.orderModel.value.chargerDetails!.userId!.toString());
                                             ShowToastDialog.closeLoader();
                                             Constant.makePhoneCall("${userModel!.countryCode}${userModel.phoneNumber}");
                                           },
@@ -630,16 +630,16 @@ class ReviewSummaryScreen extends StatelessWidget {
                       )
                     : controller.orderModel.value.paymentCompleted == true
                         ? RoundedButtonFill(
-                            title: "Navigate to parking".tr,
+                            title: "Navigate to charger".tr,
                             color: AppThemData.primary06,
                             onPress: () {
                               if (Constant.mapType == "inappmap") {
                                 Get.to(() => const LiveTrackingScreen(), arguments: {"orderModel": controller.orderModel.value});
                               } else {
                                 Utils.redirectMap(
-                                    latitude: controller.orderModel.value.parkingDetails!.location!.latitude!,
-                                    longLatitude: controller.orderModel.value.parkingDetails!.location!.longitude!,
-                                    name: controller.orderModel.value.parkingDetails!.name.toString());
+                                    latitude: controller.orderModel.value.chargerDetails!.location!.latitude!,
+                                    longLatitude: controller.orderModel.value.chargerDetails!.location!.longitude!,
+                                    name: controller.orderModel.value.chargerDetails!.name.toString());
                               }
                             },
                           )
