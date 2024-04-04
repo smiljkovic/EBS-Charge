@@ -17,7 +17,7 @@ class HomeController extends GetxController {
   RxBool isLoading = true.obs;
 
   GoogleMapController? mapController;
-  BitmapDescriptor? parkingMarker;
+  BitmapDescriptor? chargerMarker;
   BitmapDescriptor? currentLocationMarker;
 
   @override
@@ -62,14 +62,14 @@ class HomeController extends GetxController {
     FireStoreUtils().getChargerNearest(latitude: Constant.currentLocation!.latitude, longLatitude: Constant.currentLocation!.longitude).listen((event) {
       chargersList.value = event;
       for (var element in chargersList) {
-        addMarker(latitude: element.location!.latitude, longitude: element.location!.longitude, id: element.id.toString(), rotation: 0, descriptor: parkingMarker!);
+        addMarker(latitude: element.location!.latitude, longitude: element.location!.longitude, id: element.id.toString(), rotation: 0, descriptor: chargerMarker!);
       }
     });
   }
 
   addMarkerSetup() async {
-    final Uint8List parking = await Constant().getBytesFromAsset("assets/icon/ic_parking_icon.png", 100);
-    parkingMarker = BitmapDescriptor.fromBytes(parking);
+    final Uint8List charger = await Constant().getBytesFromAsset("assets/icon/ic_charger_icon.png", 100);
+    chargerMarker = BitmapDescriptor.fromBytes(charger);
 
     final Uint8List currentLocation = await Constant().getBytesFromAsset("assets/icon/ic_current_user.png", 100);
     currentLocationMarker = BitmapDescriptor.fromBytes(currentLocation);
