@@ -16,12 +16,12 @@ class SplashScreen extends StatelessWidget {
             backgroundColor: AppThemData.primary06,
             body: Container(
               decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/splash_bg.png"), fit: BoxFit.fill)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: SvgPicture.asset("assets/images/ic_splash_logo.svg"),
-                ),
-              ),
+              // child: Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Center(
+              //     child: SvgPicture.asset("assets/images/ebs-charge-logo.svg"),
+              //   ),
+              // ),
             ),
           );
         });

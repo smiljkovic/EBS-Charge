@@ -6,7 +6,8 @@ class AppThemData {
   static const Color warning06 = Color(0xFFFDB022);
   static const Color warning08 = Color(0xFFDC6803);
   static const Color primary01 = Color(0xFFFEFDF0);
-  static const Color primary06 = Color(0xFFFAC414);
+  // static const Color primary06 = Color(0xFFFAC414);
+  static const Color primary06 = Color(0xFF91A81C);
   static const Color primary03 = Color(0xFFFDF7C3);
   static const Color primary05 = Color(0xFFFDE272);
   static const Color primary07 = Color(0xFFEAA907);
