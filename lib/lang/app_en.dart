@@ -176,7 +176,7 @@ const Map<String, String> enUS = {
   "Admin commission": "Admin commission",
   "Note : Admin commission will be debited from your wallet balance. \nAdmin commission will apply on sub total minus Discount(if applicable).":
       "Note : Admin commission will be debited from your wallet balance. \nAdmin commission will apply on sub total minus Discount(if applicable).",
-  "parking_details": "Parking Details",
+  "charger_details": "Charging Location Details",
   "Please wait..": "Please wait..",
   "Spots": "Spots",
   "About": "About",
