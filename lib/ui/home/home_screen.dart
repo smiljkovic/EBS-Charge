@@ -194,16 +194,16 @@ class HomeScreen extends StatelessWidget {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        Text(
-                                                                          "${Constant.amountShow(amount: chargerModel.perHrPrice.toString())} / hour",
-                                                                          style: const TextStyle(
-                                                                            color: AppThemData.blueLight07,
-                                                                            fontSize: 14,
-                                                                            height: 1.57,
-                                                                            fontFamily: AppThemData.medium,
-                                                                            fontWeight: FontWeight.w500,
-                                                                          ),
-                                                                        ),
+                                                                        // Text(
+                                                                        //   "${Constant.amountShow(amount: chargerModel.perHrPrice.toString())} / hour",
+                                                                        //   style: const TextStyle(
+                                                                        //     color: AppThemData.blueLight07,
+                                                                        //     fontSize: 14,
+                                                                        //     height: 1.57,
+                                                                        //     fontFamily: AppThemData.medium,
+                                                                        //     fontWeight: FontWeight.w500,
+                                                                        //   ),
+                                                                        // ),
                                                                       ],
                                                                     ),
                                                                     Row(
@@ -222,31 +222,49 @@ class HomeScreen extends StatelessWidget {
                                                                             ),
                                                                           ),
                                                                         ),
+                                                                        // const SizedBox(
+                                                                        //   width: 10,
+                                                                        // ),
+                                                                        // Row(
+                                                                        //   children: [
+                                                                        //     SvgPicture.asset(
+                                                                        //         chargerModel.chargerType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
+                                                                        //         color: AppThemData.grey09),
+                                                                        //     Text(
+                                                                        //       " ${chargerModel.chargerType.toString()} wheel".tr,
+                                                                        //       maxLines: 1,
+                                                                        //       style: TextStyle(
+                                                                        //         color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
+                                                                        //         fontSize: 12,
+                                                                        //         height: 1.57,
+                                                                        //         overflow: TextOverflow.ellipsis,
+                                                                        //         fontFamily: AppThemData.semiBold,
+                                                                        //       ),
+                                                                        //     ),
+                                                                        //   ],
+                                                                        // ),
                                                                         const SizedBox(
                                                                           width: 10,
                                                                         ),
                                                                         Row(
                                                                           children: [
-                                                                            SvgPicture.asset(
-                                                                                chargerModel.chargerType == "2" ? "assets/icon/ic_bike.svg" : "assets/icon/ic_car_fill.svg",
-                                                                                color: AppThemData.grey09),
-                                                                            Text(
-                                                                              " ${chargerModel.chargerType.toString()} wheel".tr,
-                                                                              maxLines: 1,
-                                                                              style: TextStyle(
-                                                                                color: themeChange.getThem() ? AppThemData.grey06 : AppThemData.grey09,
-                                                                                fontSize: 12,
-                                                                                height: 1.57,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                fontFamily: AppThemData.semiBold,
+                                                                            Badge(
+                                                                              label: Text(chargerModel.numChargers.toString()),
+                                                                              alignment: AlignmentDirectional.bottomEnd,
+                                                                              offset: Offset (0,3),
+                                                                              backgroundColor: AppThemData.success07,
+                                                                              child: SvgPicture.asset(
+                                                                                "assets/icon/ic_charger_icon.svg",
+
                                                                               ),
-                                                                            ),
+                                                                              ),
                                                                           ],
                                                                         ),
                                                                       ],
                                                                     ),
                                                                     const SizedBox(
                                                                       height: 10,
+
                                                                     ),
                                                                     Row(
                                                                       children: [

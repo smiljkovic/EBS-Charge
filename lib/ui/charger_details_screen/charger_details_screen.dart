@@ -99,7 +99,7 @@ class ChargerDetailsScreen extends StatelessWidget {
                             height: 15,
                           ),
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Expanded(
                                 child: Column(
@@ -122,7 +122,7 @@ class ChargerDetailsScreen extends StatelessWidget {
                                       children: [
                                         const Icon(Icons.location_on_outlined, color: AppThemData.grey07, size: 16),
                                         const SizedBox(
-                                          width: 5,
+                                          width: 10,
                                         ),
                                         Expanded(
                                           child: Text(
@@ -143,25 +143,27 @@ class ChargerDetailsScreen extends StatelessWidget {
                               const SizedBox(
                                 width: 8,
                               ),
-                              InkWell(
-                                  onTap: () async {
-                                    ShowToastDialog.showLoader("Please wait".tr);
-                                    UserModel? userModel = await FireStoreUtils.getUserProfile(controller.chargerModel.value.userId.toString());
-                                    ShowToastDialog.closeLoader();
-                                    Constant.makePhoneCall("${userModel!.countryCode}${userModel.phoneNumber}");
-                                  },
-                                  child: SvgPicture.asset("assets/icon/ic_call.svg")),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              InkWell(
-                                  onTap: () async {
-                                    await FireStoreUtils.getUserProfile(controller.chargerModel.value.userId.toString()).then((value) {
-                                      UserModel userModel = value!;
-                                      Get.to(const ChatScreen(), arguments: {"receiverModel": userModel});
-                                    });
-                                  },
-                                  child: SvgPicture.asset("assets/icon/ic_chat.svg"))
+                              boxDecoration(controller.distance.value, themeChange, Icons.directions_car),
+
+                              // InkWell(
+                              //     onTap: () async {
+                              //       ShowToastDialog.showLoader("Please wait".tr);
+                              //       UserModel? userModel = await FireStoreUtils.getUserProfile(controller.chargerModel.value.userId.toString());
+                              //       ShowToastDialog.closeLoader();
+                              //       Constant.makePhoneCall("${userModel!.countryCode}${userModel.phoneNumber}");
+                              //     },
+                              //     child: SvgPicture.asset("assets/icon/ic_call.svg")),
+                              // const SizedBox(
+                              //   width: 10,
+                              // ),
+                              // InkWell(
+                              //     onTap: () async {
+                              //       await FireStoreUtils.getUserProfile(controller.chargerModel.value.userId.toString()).then((value) {
+                              //         UserModel userModel = value!;
+                              //         Get.to(const ChatScreen(), arguments: {"receiverModel": userModel});
+                              //       });
+                              //     },
+                              //     child: SvgPicture.asset("assets/icon/ic_chat.svg"))
                               // InkWell(
                               //     onTap: () async {
                               //       ShowToastDialog.showLoader("Please wait..");
@@ -343,6 +345,7 @@ class ChargerDetailsScreen extends StatelessWidget {
 
   Widget boxDecoration(String title, themeChange, IconData? image) {
     return Container(
+
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: AppThemData.primary03),
       child: Center(
