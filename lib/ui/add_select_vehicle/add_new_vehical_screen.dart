@@ -114,7 +114,7 @@ class AddNewVehicleScreen extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    Text("Car Model".tr, style: const TextStyle(fontFamily: AppThemData.medium, fontSize: 14, color: AppThemData.grey07)),
+                    Text("Vehicle Model".tr, style: const TextStyle(fontFamily: AppThemData.medium, fontSize: 14, color: AppThemData.grey07)),
                     const SizedBox(
                       height: 5,
                     ),
@@ -172,19 +172,19 @@ class AddNewVehicleScreen extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    TextFieldWidget(
-                      title: 'Licence Plate Number'.tr,
-                      onPress: () {},
-                      controller: controller.vehicleNumberController.value,
-                      hintText: 'Enter Licence Plate Number'.tr,
-                      textInputType: TextInputType.emailAddress,
-                      prefix: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SvgPicture.asset(
-                          "assets/icon/ic_tag.svg",
-                        ),
-                      ),
-                    ),
+                    // TextFieldWidget(
+                    //   title: 'Licence Plate Number'.tr,
+                    //   onPress: () {},
+                    //   controller: controller.vehicleNumberController.value,
+                    //   hintText: 'Enter Licence Plate Number'.tr,
+                    //   textInputType: TextInputType.emailAddress,
+                    //   prefix: Padding(
+                    //     padding: const EdgeInsets.all(12.0),
+                    //     child: SvgPicture.asset(
+                    //       "assets/icon/ic_tag.svg",
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -202,8 +202,8 @@ class AddNewVehicleScreen extends StatelessWidget {
                       ShowToastDialog.showToast("Select Vehicle Brand".tr);
                     } else if (controller.selectedVehicleModel.value.id == null) {
                       ShowToastDialog.showToast("Select Vehicle Model".tr);
-                    } else if (controller.vehicleNumberController.value.text.isEmpty) {
-                      ShowToastDialog.showToast("Enter Plate Number".tr);
+                    // } else if (controller.vehicleNumberController.value.text.isEmpty) {
+                    //   ShowToastDialog.showToast("Enter Plate Number".tr);
                     } else {
                       controller.saveVehicleInformation();
                     }

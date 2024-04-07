@@ -70,7 +70,7 @@ class VehicleListController extends GetxController {
     UserVehicleModel userVehicleModel = UserVehicleModel();
     userVehicleModel.vehicleModel = selectedVehicleModel.value;
     userVehicleModel.vehicleBrand = selectedBrand.value;
-    userVehicleModel.vehicleNumber = vehicleNumberController.value.text;
+    // userVehicleModel.vehicleNumber = vehicleNumberController.value.text;
     userVehicleModel.id = Constant.getUuid();
     userVehicleModel.userId = FireStoreUtils.getCurrentUid();
 

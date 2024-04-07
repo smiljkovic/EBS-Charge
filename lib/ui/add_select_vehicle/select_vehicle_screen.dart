@@ -121,11 +121,11 @@ class SelectVehicleScreen extends StatelessWidget {
                                                 const SizedBox(
                                                   height: 4,
                                                 ),
-                                                Text(
-                                                  userVehicleModel.vehicleNumber.toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 14, fontFamily: AppThemData.medium, color: themeChange.getThem() ? AppThemData.grey07 : AppThemData.grey07),
-                                                ),
+                                                // Text(
+                                                //   userVehicleModel.vehicleNumber.toString(),
+                                                //   style: TextStyle(
+                                                //       fontSize: 14, fontFamily: AppThemData.medium, color: themeChange.getThem() ? AppThemData.grey07 : AppThemData.grey07),
+                                                // ),
                                               ],
                                             ),
                                           ),

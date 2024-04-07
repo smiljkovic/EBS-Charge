@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                         height: 12,
                       ),
                       Text(
-                        "Instant parking at your fingertips. No more circling - find, reserve, and pay instantly!".tr,
+                        "Electric bicycle or scooter charging made easy, at your fingertips. No more circling - find, reserve, and pay instantly!".tr,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: AppThemData.grey07,
